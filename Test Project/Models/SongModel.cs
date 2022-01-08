@@ -1,22 +1,20 @@
 ﻿using MusicAPI.Enum.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MusicAPI.Models;
 
-public class SongModel
+[Table("Songs")]
+public class SongModel : MusicBase
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
-    public string? Name { get; set; }
-
     public Genre Genre { get; set; }
 
     [ForeignKey("Album")]
+    [JsonIgnore]
     public int? AlbumID { get; set; }
 
+    [JsonIgnore]
     public AlbumModel? Album { get; set; }
 }
 

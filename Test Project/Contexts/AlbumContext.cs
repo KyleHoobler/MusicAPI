@@ -15,10 +15,17 @@ namespace MusicAPI.Contexts
 
         public DbSet<SongModel> Songs { get; set; }
 
+        public DbSet<ArtistModel> Artists { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AlbumModel>()
-                .HasMany(b => b.Songs);
+                .HasOne(x => x.Artist)
+                .WithMany(x => x.Albums);
+
+            modelBuilder.Entity<AlbumModel>()
+                .HasMany(x => x.Songs);
+
         }
 
     }

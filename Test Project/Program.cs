@@ -35,6 +35,7 @@ string connectionString = configuration.GetConnectionString("MusicDB");
 builder.Services.AddDbContext<AlbumContext>(options =>
         options.UseSqlServer(connectionString));
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -22,7 +22,7 @@ namespace MusicAPI.Controllers
 
         // GET: api/<SongController>
         [HttpGet]
-        public IEnumerable<AlbumModel> Get()
+        public List<AlbumModel> GetAlbums()
         {
             List<AlbumModel> albums = _albumContext.Albums.Include((x) => x.Songs).ToList();
 
@@ -30,11 +30,9 @@ namespace MusicAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public AlbumModel Get(int id)
+        public AlbumModel GetAlbum(int id)
         {
-
-            return _albumContext.Albums.Where((x) => x.Id == id).FirstOrDefault() ?? new AlbumModel();
-
+            return _albumContext.Albums.Include((x) => x.Songs).Where((x) => x.Id == id).FirstOrDefault() ?? new AlbumModel();
         }
 
         [HttpPost(Name = "Add Full Album")]
@@ -46,7 +44,7 @@ namespace MusicAPI.Controllers
 
         // DELETE api/<SongController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteAlbum(int id)
         {
             _albumContext.Albums.Remove(_albumContext.Albums.Where((x) => x.Id == id).SingleOrDefault());
             _albumContext.SaveChanges();

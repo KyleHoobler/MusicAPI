@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MusicAPI.Models
 {
-    public class AlbumBase
+    public abstract class MusicBase
     {
         /// <summary>
         /// ID For the album
@@ -15,22 +16,16 @@ namespace MusicAPI.Models
         /// <summary>
         /// Name of the album
         /// </summary>
+        [Required]
+        [StringLength(50)]
         public string? Name { get; set; }
 
-        /// <summary>
-        /// Release Date of the album
-        /// </summary>
-        public DateTime? ReleaseDate { get; set; }
+        [ForeignKey("Artist")]
+        public int ArtistID { get; set; }
 
-        public AlbumModel ConvertToAlbumModel()
-        {
-            AlbumModel model = new AlbumModel();
+        [Required]
+        [JsonIgnore]
+        public ArtistModel Artist { get; set; }
 
-            model.Id = Id;
-            model.Name = Name;
-            model.ReleaseDate = ReleaseDate;
-
-            return model;
-        }
     }
 }

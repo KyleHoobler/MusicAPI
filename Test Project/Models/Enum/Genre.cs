@@ -6,6 +6,7 @@
         Rap,
         Country,
         Pop,
-        Classical
+        Classical,
+        Dance
     }
 }

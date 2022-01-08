@@ -3,8 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicAPI.Models
 {
-    public class AlbumModel : AlbumBase
+    [Table("Albums")]
+    public class AlbumModel : MusicBase
     {
+
+        /// <summary>
+        /// Release Date of the album
+        /// </summary>
+        public DateTime? ReleaseDate { get; set; }
 
         /// <summary>
         /// List of songs on the album
