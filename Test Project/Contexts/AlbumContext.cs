@@ -5,7 +5,8 @@ namespace MusicAPI.Contexts
 {
     public class AlbumContext : DbContext
     {
-        public AlbumContext() : base()
+
+        public AlbumContext(DbContextOptions<AlbumContext> options) : base(options)
         {
 
         }
@@ -13,11 +14,6 @@ namespace MusicAPI.Contexts
         public DbSet<AlbumModel> Albums { get; set; }
 
         public DbSet<SongModel> Songs { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=KYLE;Database=MusicDB;Trusted_Connection=True;");
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -13,58 +13,44 @@ namespace MusicAPI.Controllers
     [Route("[controller]")]
     public class AlbumController : ControllerBase
     {
+        private AlbumContext _albumContext;
+
+        public AlbumController(AlbumContext context)
+        {
+            _albumContext = context;
+        }
+
         // GET: api/<SongController>
         [HttpGet]
         public IEnumerable<AlbumModel> Get()
         {
-            using (AlbumContext context = new AlbumContext())
-            {
-                List<AlbumModel> albums = context.Albums.Include((x) => x.Songs).ToList();
+            List<AlbumModel> albums = _albumContext.Albums.Include((x) => x.Songs).ToList();
 
-                return albums;
-            }
+            return albums;
         }
 
         [HttpGet("{id}")]
         public AlbumModel Get(int id)
         {
-            using (AlbumContext context = new AlbumContext())
-            {
-                return context.Albums.Where((x) => x.Id == id).FirstOrDefault() ?? new AlbumModel();
-            }
+
+            return _albumContext.Albums.Where((x) => x.Id == id).FirstOrDefault() ?? new AlbumModel();
+
         }
 
-        //[HttpPost(Name ="Add Album")]
-        //public void AddAlbum([FromBody] AlbumBase value)
-        //{
-        //    using (AlbumContext context = new AlbumContext())
-        //    {
-        //        context.Albums.Add(value.ConvertToAlbumModel());
-        //        context.SaveChanges();
-        //    }
-        //}
-
-        [HttpPost(Name ="Add Full Album")]
-        public bool AddFullAlbum(AlbumModel value)
+        [HttpPost(Name = "Add Full Album")]
+        public void AddFullAlbum(AlbumModel value)
         {
-            using (AlbumContext context = new AlbumContext())
-            {
-                context.Albums.Add(value);
-                context.SaveChanges();
-            }
-
-            return true;
+            _albumContext.Albums.Add(value);
+            _albumContext.SaveChanges();
         }
 
         // DELETE api/<SongController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            using (AlbumContext context = new AlbumContext())
-            {
-                context.Albums.Remove(context.Albums.Where((x) => x.Id == id).SingleOrDefault());
-                context.SaveChanges();
-            }
+            _albumContext.Albums.Remove(_albumContext.Albums.Where((x) => x.Id == id).SingleOrDefault());
+            _albumContext.SaveChanges();
+
         }
     }
 }
