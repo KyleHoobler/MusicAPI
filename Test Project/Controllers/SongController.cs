@@ -14,47 +14,47 @@ namespace MusicAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlbumController : ControllerBase
+    public class SongController : ControllerBase
     {
         private readonly MusicContext MusicContext;
 
-        public AlbumController(MusicContext context)
+        public SongController(MusicContext context)
         {
             MusicContext = context;
         }
 
-        // GET: api/Album
+        // GET: api/Song
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AlbumModel>>> GetAlbums()
+        public async Task<ActionResult<IEnumerable<SongModel>>> GetSongs()
         {
-            return await MusicContext.Albums.ToListAsync();
+            return await MusicContext.Songs.ToListAsync();
         }
 
-        // GET: api/Album/5
+        // GET: api/Song/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AlbumModel>> GetAlbum(int id)
+        public async Task<ActionResult<SongModel>> GetSongModel(int id)
         {
-            var albumModel = await MusicContext.Albums.FindAsync(id);
+            var songModel = await MusicContext.Songs.FindAsync(id);
 
-            if (albumModel == null)
+            if (songModel == null)
             {
                 return NotFound();
             }
 
-            return albumModel;
+            return songModel;
         }
 
-        // PUT: api/Album/5
+        // PUT: api/Song/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAlbum(int id, AlbumModel albumModel)
+        public async Task<IActionResult> PutSongModel(int id, SongModel songModel)
         {
-            if (id != albumModel.Id)
+            if (id != songModel.Id)
             {
                 return BadRequest();
             }
 
-            MusicContext.Entry(albumModel).State = EntityState.Modified;
+            MusicContext.Entry(songModel).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +62,7 @@ namespace MusicAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AlbumModelExists(id))
+                if (!SongModelExists(id))
                 {
                     return NotFound();
                 }
@@ -75,47 +75,44 @@ namespace MusicAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Album
+        // POST: api/Song
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("{ArtistID}")]
-        public async Task<ActionResult<AlbumModel>> PostAlbum(int ArtistID, AlbumModel albumModel)
+        [HttpPost]
+        public async Task<ActionResult<SongModel>> PostSongModel(int ArtistID, int AlbumID, SongModel songModel)
         {
-
             if (!MusicContext.Artists.Any(x => x.Id == ArtistID))
                 throw new InvalidArtistException("Selected ArtistID does not exist.");
 
-            albumModel.ArtistID = ArtistID;
-            albumModel.Songs.ForEach((x) =>
-            {
-                if(x.ArtistID is null)
-                    x.ArtistID = ArtistID;
-            });
+            if (!MusicContext.Albums.Any(x => x.Id == AlbumID))
+                throw new InvalidAlbumException("Selected AlbumID does not exist.");
 
-            MusicContext.Albums.Add(albumModel);
+            songModel.ArtistID = ArtistID;
+            songModel.AlbumID = AlbumID;
+            MusicContext.Songs.Add(songModel);
             await MusicContext.SaveChangesAsync();
 
-            return CreatedAtAction("GetAlbumModel", new { id = albumModel.Id }, albumModel);
+            return CreatedAtAction("GetSongModel", new { id = songModel.Id }, songModel);
         }
 
-        // DELETE: api/Album/5
+        // DELETE: api/Song/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAlbum(int id)
+        public async Task<IActionResult> DeleteSongModel(int id)
         {
-            var albumModel = await MusicContext.Albums.FindAsync(id);
-            if (albumModel == null)
+            var songModel = await MusicContext.Songs.FindAsync(id);
+            if (songModel == null)
             {
                 return NotFound();
             }
 
-            MusicContext.Albums.Remove(albumModel);
+            MusicContext.Songs.Remove(songModel);
             await MusicContext.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool AlbumModelExists(int id)
+        private bool SongModelExists(int id)
         {
-            return MusicContext.Albums.Any(e => e.Id == id);
+            return MusicContext.Songs.Any(e => e.Id == id);
         }
     }
 }

@@ -8,6 +8,13 @@ namespace MusicAPI.Models;
 [Table("Songs")]
 public class SongModel : MusicBase
 {
+    /// <summary>
+    /// ID For the album
+    /// </summary>
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
     public Genre Genre { get; set; }
 
     [ForeignKey("Album")]

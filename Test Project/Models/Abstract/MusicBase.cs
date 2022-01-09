@@ -7,13 +7,6 @@ namespace MusicAPI.Models
     public abstract class MusicBase
     {
         /// <summary>
-        /// ID For the album
-        /// </summary>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        /// <summary>
         /// Name of the album
         /// </summary>
         [Required]
@@ -21,11 +14,11 @@ namespace MusicAPI.Models
         public string? Name { get; set; }
 
         [ForeignKey("Artist")]
-        public int ArtistID { get; set; }
-
-        [Required]
         [JsonIgnore]
-        public ArtistModel Artist { get; set; }
+        public int? ArtistID { get; set; }
+
+        [JsonIgnore]
+        public ArtistModel? Artist { get; set; }
 
     }
 }

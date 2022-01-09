@@ -3,10 +3,10 @@ using MusicAPI.Models;
 
 namespace MusicAPI.Contexts
 {
-    public class AlbumContext : DbContext
+    public class MusicContext : DbContext
     {
 
-        public AlbumContext(DbContextOptions<AlbumContext> options) : base(options)
+        public MusicContext(DbContextOptions<MusicContext> options) : base(options)
         {
 
         }

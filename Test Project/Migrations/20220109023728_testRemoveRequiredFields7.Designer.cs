@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicAPI.Contexts;
 
@@ -11,9 +12,10 @@ using MusicAPI.Contexts;
 namespace Test_Project.Migrations
 {
     [DbContext(typeof(MusicContext))]
-    partial class AlbumContextModelSnapshot : ModelSnapshot
+    [Migration("20220109023728_testRemoveRequiredFields7")]
+    partial class testRemoveRequiredFields7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +35,9 @@ namespace Test_Project.Migrations
                     b.Property<int?>("ArtistID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ArtistModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -44,6 +49,8 @@ namespace Test_Project.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ArtistID");
+
+                    b.HasIndex("ArtistModelId");
 
                     b.ToTable("Albums");
                 });
@@ -77,6 +84,9 @@ namespace Test_Project.Migrations
                     b.Property<int?>("AlbumID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AlbumModelId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ArtistID")
                         .HasColumnType("int");
 
@@ -92,6 +102,8 @@ namespace Test_Project.Migrations
 
                     b.HasIndex("AlbumID");
 
+                    b.HasIndex("AlbumModelId");
+
                     b.HasIndex("ArtistID");
 
                     b.ToTable("Songs");
@@ -100,8 +112,12 @@ namespace Test_Project.Migrations
             modelBuilder.Entity("MusicAPI.Models.AlbumModel", b =>
                 {
                     b.HasOne("MusicAPI.Models.ArtistModel", "Artist")
-                        .WithMany("Albums")
+                        .WithMany()
                         .HasForeignKey("ArtistID");
+
+                    b.HasOne("MusicAPI.Models.ArtistModel", null)
+                        .WithMany("Albums")
+                        .HasForeignKey("ArtistModelId");
 
                     b.Navigation("Artist");
                 });
@@ -109,8 +125,12 @@ namespace Test_Project.Migrations
             modelBuilder.Entity("MusicAPI.Models.SongModel", b =>
                 {
                     b.HasOne("MusicAPI.Models.AlbumModel", "Album")
-                        .WithMany("Songs")
+                        .WithMany()
                         .HasForeignKey("AlbumID");
+
+                    b.HasOne("MusicAPI.Models.AlbumModel", null)
+                        .WithMany("Songs")
+                        .HasForeignKey("AlbumModelId");
 
                     b.HasOne("MusicAPI.Models.ArtistModel", "Artist")
                         .WithMany()

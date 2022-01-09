@@ -12,8 +12,8 @@ using MusicAPI.Contexts;
 namespace Test_Project.Migrations
 {
     [DbContext(typeof(MusicContext))]
-    [Migration("20220108172339_Test4")]
-    partial class Test4
+    [Migration("20220109015742_testRemoveRequiredFields3")]
+    partial class testRemoveRequiredFields3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,15 +32,40 @@ namespace Test_Project.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("ArtistID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArtistID");
+
                     b.ToTable("Albums");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.ArtistModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("MusicAPI.Models.SongModel", b =>
@@ -51,36 +76,61 @@ namespace Test_Project.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AlbumID")
+                    b.Property<int?>("AlbumID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ArtistID")
                         .HasColumnType("int");
 
                     b.Property<int>("Genre")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumID");
 
+                    b.HasIndex("ArtistID");
+
                     b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.AlbumModel", b =>
+                {
+                    b.HasOne("MusicAPI.Models.ArtistModel", "Artist")
+                        .WithMany("Albums")
+                        .HasForeignKey("ArtistID");
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("MusicAPI.Models.SongModel", b =>
                 {
                     b.HasOne("MusicAPI.Models.AlbumModel", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AlbumID");
+
+                    b.HasOne("MusicAPI.Models.ArtistModel", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistID");
 
                     b.Navigation("Album");
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("MusicAPI.Models.AlbumModel", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("MusicAPI.Models.ArtistModel", b =>
+                {
+                    b.Navigation("Albums");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,7 +11,7 @@ using MusicAPI.Contexts;
 
 namespace Test_Project.Migrations
 {
-    [DbContext(typeof(AlbumContext))]
+    [DbContext(typeof(MusicContext))]
     [Migration("20220108222520_Added-Artist2")]
     partial class AddedArtist2
     {

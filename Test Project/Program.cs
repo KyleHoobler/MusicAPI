@@ -32,7 +32,7 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 string connectionString = configuration.GetConnectionString("MusicDB");
 
 
-builder.Services.AddDbContext<AlbumContext>(options =>
+builder.Services.AddDbContext<MusicContext>(options =>
         options.UseSqlServer(connectionString));
 
 
