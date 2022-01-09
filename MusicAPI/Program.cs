@@ -22,7 +22,7 @@ builder.Services.AddAuthorization(options =>
     options.FallbackPolicy = options.DefaultPolicy;
 });
 
-string projectPath = AppDomain.CurrentDomain.BaseDirectory.Split(new String[] { @"bin\" }, StringSplitOptions.None)[0];
+string projectPath = Directory.GetCurrentDirectory();
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
     .SetBasePath(projectPath)
